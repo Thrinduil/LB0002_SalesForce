@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SalesForce
 {
@@ -14,11 +15,21 @@ namespace SalesForce
             SalesPerson Joakim = SalesPerson.GetSalesPerson();
             Console.WriteLine(Joakim);
 
+            List<SalesPerson> myList = new List<SalesPerson> { };
+            myList.Add(Kalle);
+            myList.Add(Joakim);
+
+            myList.Sort();
+            foreach (var salesPerson in myList)
+            {
+                Console.WriteLine(salesPerson);
+            }
+
             Console.ReadLine();
         }        
     }
 
-    public class SalesPerson
+    public class SalesPerson : IComparable<SalesPerson>
     {
         // Medlemsvariabler
         readonly string name;
@@ -51,6 +62,11 @@ namespace SalesForce
             int soldArticles = Convert.ToInt32(Console.ReadLine());
 
             return new SalesPerson(name, personalCodeNumber, district, soldArticles);
+        }
+
+        public int CompareTo(SalesPerson salesPerson)
+        {
+            return soldArticles.CompareTo(salesPerson.soldArticles);
         }
 
         public override string ToString()

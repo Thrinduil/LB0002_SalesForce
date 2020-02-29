@@ -7,25 +7,32 @@ namespace SalesForce
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            List<SalesPerson> salesPersons = new List<SalesPerson> { };
 
-            SalesPerson Kalle = new SalesPerson("Kalle Anka", "0101010001", "Ankeborg", 123);
-            Console.WriteLine(Kalle);
+            // Testdata
+            salesPersons.Add(new SalesPerson("Kalle Anka", "000", "Ankeborg", 39));
+            salesPersons.Add(new SalesPerson("Joakim von Anka", "000", "Ankeborg", 198));
+            salesPersons.Add(new SalesPerson("Alexander Lukas", "000", "Ankeborg", 201));
+            salesPersons.Add(new SalesPerson("Knatte Anka", "000", "Ankeborg", 52));
+            salesPersons.Add(new SalesPerson("Fnatte Anka", "000", "Ankeborg", 75));
+            salesPersons.Add(new SalesPerson("Tjatte Anka", "000", "Ankeborg", 100));
 
-            SalesPerson Joakim = SalesPerson.GetSalesPerson();
-            Console.WriteLine(Joakim);
+            // Lägg till säljare
+            Console.WriteLine("Hur många säljare vill du lägga till?");
+            int salesGuysToAdd = Convert.ToInt32(Console.ReadLine());
+            for (int i = 0; i < salesGuysToAdd; i++)
+            {
+                salesPersons.Add(SalesPerson.GetSalesPerson());
+            }
 
-            List<SalesPerson> myList = new List<SalesPerson> { };
-            myList.Add(Kalle);
-            myList.Add(Joakim);
-
-            myList.Sort();
-            foreach (var salesPerson in myList)
+            salesPersons.Sort();
+            foreach (var salesPerson in salesPersons)
             {
                 Console.WriteLine(salesPerson);
             }
 
             Console.ReadLine();
+            
         }        
     }
 
@@ -66,7 +73,8 @@ namespace SalesForce
 
         public int CompareTo(SalesPerson salesPerson)
         {
-            return soldArticles.CompareTo(salesPerson.soldArticles);
+            // Ett minustecken innan sorterar från högsta till lägsta
+            return -soldArticles.CompareTo(salesPerson.soldArticles);
         }
 
         public override string ToString()

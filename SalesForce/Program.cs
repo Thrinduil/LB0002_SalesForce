@@ -16,6 +16,8 @@ namespace SalesForce
             salesPersons.Add(new SalesPerson("Knatte Anka", "000", "Ankeborg", 52));
             salesPersons.Add(new SalesPerson("Fnatte Anka", "000", "Ankeborg", 75));
             salesPersons.Add(new SalesPerson("Tjatte Anka", "000", "Ankeborg", 100));
+            salesPersons.Add(new SalesPerson("Knase Anka", "000", "Ankeborg", -3));
+            salesPersons.Add(new SalesPerson("Kvacke Anka", "000", "Ankeborg", 0));
 
             // Lägg till säljare
             Console.WriteLine("Hur många säljare vill du lägga till?");
@@ -25,15 +27,45 @@ namespace SalesForce
                 salesPersons.Add(SalesPerson.GetSalesPerson());
             }
 
+            // Beräkna bonus
             salesPersons.Sort();
-            foreach (var salesPerson in salesPersons)
+            int currentBonusGroup = BonusProgram.Levels.Length;  // Börja med högsta gruppen
+            int salesPersonsInCurrentGroup = 0;
+            foreach (SalesPerson salesPerson in salesPersons)
             {
+                int bonusGroup = BonusProgram.BonusGroup(salesPerson);
+
+                if (bonusGroup < currentBonusGroup)
+                {
+                    PrintBonusLevelSummary(salesPersonsInCurrentGroup, currentBonusGroup);
+                    currentBonusGroup -= 1;
+                    salesPersonsInCurrentGroup = 0;
+                }
                 Console.WriteLine(salesPerson);
+                salesPersonsInCurrentGroup += 1;
             }
+            PrintBonusLevelSummary(salesPersonsInCurrentGroup, currentBonusGroup);
 
             Console.ReadLine();
-            
-        }        
+        }
+
+        private static void PrintBonusLevelSummary(int salesPersonsInCurrentGroup, int currentBonusGroup)
+        {
+            if (currentBonusGroup == 0) // Skriv inte ut säljare i bonusgrupp 0
+            {
+                return;
+            }
+            if (currentBonusGroup == BonusProgram.Levels.Length)
+            {
+                Console.WriteLine("{0} säljare har nått nivå {1}: {2}+ artiklar", salesPersonsInCurrentGroup, currentBonusGroup, BonusProgram.Levels[BonusProgram.Levels.Length - 1]);
+                Console.WriteLine("");
+            }
+            else
+            {
+                Console.WriteLine("{0} säljare har nått nivå {1}: {2}-{3} artiklar", salesPersonsInCurrentGroup, currentBonusGroup, BonusProgram.Levels[currentBonusGroup - 1], BonusProgram.Levels[currentBonusGroup]);
+                Console.WriteLine("");
+            }
+        }
     }
 
     public class SalesPerson : IComparable<SalesPerson>
@@ -42,7 +74,7 @@ namespace SalesForce
         readonly string name;
         readonly string personalCodeNumber;
         readonly string district;
-        readonly int soldArticles;
+        public readonly int soldArticles;
 
         // Konstruktor
         public SalesPerson(string name, string personalCodeNumber, string district, int soldArticles)
@@ -80,6 +112,38 @@ namespace SalesForce
         public override string ToString()
         {
             return name + "\t" + personalCodeNumber + "\t" + district + "\t" + soldArticles;
+        }
+    }
+
+    public class BonusProgram
+    {
+        public static readonly int[] Levels = { 1, 50, 100, 200 };  // Ändra bonusnivåerna här
+
+        public static int BonusGroup(SalesPerson salesPerson)
+        {
+            int soldArticles = salesPerson.soldArticles;
+
+            if (soldArticles < 1) // Returnera 0 om säljaren inte sålt något
+            {
+                return 0;
+            }
+
+            int bonusLevel = 1;
+            for (int i = 0; i < Levels.Length; i++)
+            {
+                if (bonusLevel == BonusProgram.Levels.Length) // Returnera högsta möjliga bonusnivå
+                {
+                    return bonusLevel;
+                }
+
+                if (BonusProgram.Levels[i] <= soldArticles && soldArticles < BonusProgram.Levels[i + 1]) // Se om antal sålda artiklar ligger inom bonusintervallet
+                {
+                    return bonusLevel;
+                }
+                bonusLevel += 1;
+            }
+
+            return 0; // Returnera 0 som en sista utväg
         }
     }
 }

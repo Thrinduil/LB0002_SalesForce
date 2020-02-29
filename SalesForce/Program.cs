@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
 
 namespace SalesForce
 {
@@ -7,6 +9,7 @@ namespace SalesForce
     {
         static void Main(string[] args)
         {
+            StringBuilder LogString = new StringBuilder();
             List<SalesPerson> salesPersons = new List<SalesPerson> { };
 
             // Testdata
@@ -41,11 +44,14 @@ namespace SalesForce
                     currentBonusGroup -= 1;
                     salesPersonsInCurrentGroup = 0;
                 }
-                Console.WriteLine(salesPerson);
+                Logger.Out(salesPerson.ToString());
                 salesPersonsInCurrentGroup += 1;
             }
             PrintBonusLevelSummary(salesPersonsInCurrentGroup, currentBonusGroup);
 
+            string logFile = Environment.CurrentDirectory + @"\log.txt";
+            File.WriteAllText(logFile, Logger.LogString.ToString());
+            Console.WriteLine($"Resultatet har sparats i {logFile}");
             Console.ReadLine();
         }
 
@@ -57,13 +63,13 @@ namespace SalesForce
             }
             if (currentBonusGroup == BonusProgram.Levels.Length)
             {
-                Console.WriteLine("{0} säljare har nått nivå {1}: {2}+ artiklar", salesPersonsInCurrentGroup, currentBonusGroup, BonusProgram.Levels[BonusProgram.Levels.Length - 1]);
-                Console.WriteLine("");
+                Logger.Out($"{salesPersonsInCurrentGroup} säljare har nått nivå {currentBonusGroup}: {BonusProgram.Levels[BonusProgram.Levels.Length - 1]}+ artiklar");
+                Logger.Out("");
             }
             else
             {
-                Console.WriteLine("{0} säljare har nått nivå {1}: {2}-{3} artiklar", salesPersonsInCurrentGroup, currentBonusGroup, BonusProgram.Levels[currentBonusGroup - 1], BonusProgram.Levels[currentBonusGroup]);
-                Console.WriteLine("");
+                Logger.Out($"{salesPersonsInCurrentGroup} säljare har nått nivå {currentBonusGroup}: {BonusProgram.Levels[currentBonusGroup - 1]}-{BonusProgram.Levels[currentBonusGroup]} artiklar");
+                Logger.Out("");
             }
         }
     }
@@ -88,16 +94,16 @@ namespace SalesForce
         // Metoder
         public static SalesPerson GetSalesPerson()
         {
-            Console.WriteLine("Namn:");
+            Logger.Out("Namn:");
             string name = Console.ReadLine();
 
-            Console.WriteLine("Personnummer:");
+            Logger.Out("Personnummer:");
             string personalCodeNumber = Console.ReadLine();
 
-            Console.WriteLine("Distrikt:");
+            Logger.Out("Distrikt:");
             string district = Console.ReadLine();
 
-            Console.WriteLine("Antal sålda artiklar:");
+            Logger.Out("Antal sålda artiklar:");
             int soldArticles = Convert.ToInt32(Console.ReadLine());
 
             return new SalesPerson(name, personalCodeNumber, district, soldArticles);
@@ -144,6 +150,17 @@ namespace SalesForce
             }
 
             return 0; // Returnera 0 som en sista utväg
+        }
+    }
+
+    public static class Logger
+    {
+        public static StringBuilder LogString = new StringBuilder();
+
+        public static void Out(string str)
+        {
+            Console.WriteLine(str);
+            LogString.Append(str).Append(Environment.NewLine);
         }
     }
 }

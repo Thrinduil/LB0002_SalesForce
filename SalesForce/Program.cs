@@ -13,14 +13,14 @@ namespace SalesForce
             List<SalesPerson> salesPersons = new List<SalesPerson> { };
 
             // Testdata
-            salesPersons.Add(new SalesPerson("Kalle Anka", "000", "Ankeborg", 39));
-            salesPersons.Add(new SalesPerson("Joakim von Anka", "000", "Ankeborg", 198));
-            salesPersons.Add(new SalesPerson("Alexander Lukas", "000", "Ankeborg", 201));
-            salesPersons.Add(new SalesPerson("Knatte Anka", "000", "Ankeborg", 52));
-            salesPersons.Add(new SalesPerson("Fnatte Anka", "000", "Ankeborg", 75));
-            salesPersons.Add(new SalesPerson("Tjatte Anka", "000", "Ankeborg", 100));
-            salesPersons.Add(new SalesPerson("Knase Anka", "000", "Ankeborg", -3));
-            salesPersons.Add(new SalesPerson("Kvacke Anka", "000", "Ankeborg", 0));
+            //salesPersons.Add(new SalesPerson("Kalle Anka", "000", "Ankeborg", 39));
+            //salesPersons.Add(new SalesPerson("Joakim von Anka", "000", "Ankeborg", 198));
+            //salesPersons.Add(new SalesPerson("Alexander Lukas", "000", "Ankeborg", 201));
+            //salesPersons.Add(new SalesPerson("Knatte Anka", "000", "Ankeborg", 52));
+            //salesPersons.Add(new SalesPerson("Fnatte Anka", "000", "Ankeborg", 75));
+            //salesPersons.Add(new SalesPerson("Tjatte Anka", "000", "Ankeborg", 100));
+            //salesPersons.Add(new SalesPerson("Knase Anka", "000", "Ankeborg", -3));
+            //salesPersons.Add(new SalesPerson("Kvacke Anka", "000", "Ankeborg", 0));
 
             // Lägg till säljare
             Console.WriteLine("Hur många säljare vill du lägga till?");
